@@ -83,7 +83,7 @@ void AFGGridActor::ResetBoard()
 	for (auto& Tile : TileList)
 	{
 		//UE_LOG(LogTemp, Log, TEXT("Resetting board"))
-		Tile.Weight = 10;
+		Tile.Weight = 1;
 		Tile.ParentId = NULL;
 		UE_LOG(LogTemp, Log, TEXT("Resetting board, Weight: %d"), Tile.Weight)
 	}

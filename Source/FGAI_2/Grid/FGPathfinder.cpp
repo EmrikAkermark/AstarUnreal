@@ -87,17 +87,18 @@ void UFGPathfinder::StartPathfinding(int32 StartCell, int32 EndCell)
 		UE_LOG(LogTemp, Log, TEXT("Couldn't find end"));
 		
 	}
-	while(Grid->TileList[CurrentCell].ParentId != StartCell)
+	while(CurrentCell != StartCell)
     {
     	if(Path.Contains(Grid->TileList[CurrentCell].ParentId))
     	{
     		UE_LOG(LogTemp, Log, TEXT("Something's fucky"))
     		break;
     	}
-    	Path.Add(Grid->TileList[CurrentCell].ParentId);
+    	Path.Add(CurrentCell);
 		UE_LOG(LogTemp,Log, TEXT("%d, %d"), CurrentCell, Grid->TileList[CurrentCell].Weight );
     	CurrentCell = Grid->TileList[CurrentCell].ParentId;
     }
+	Path.Add(CurrentCell);
 	//UE_LOG(LogTemp,Log, TEXT("%d, %d"), CurrentCell, Grid->TileList[CurrentCell].Weight );
 	//int32 X;
 	//int32 Y;
@@ -146,6 +147,10 @@ void UFGPathfinder::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	for (auto Index : OpenList)
+	{
+		DrawSphere(Index, FColor::Black);
+	}
 	for (auto Index : ClosedList)
 	{
 		DrawSphere(Index, FColor::Red);
