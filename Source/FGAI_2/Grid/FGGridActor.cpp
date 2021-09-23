@@ -64,6 +64,19 @@ int32 AFGGridActor::GetFValue(int32 CellFrom, int32 CellTo)
 	return TileList[CellFrom].Weight + FMath::Abs(FromX - ToX) + FMath::Abs(FromY - ToY);
 }
 
+int32 AFGGridActor::GetHValue(int32 CellFrom, int32 CellTo)
+{
+	int32 FromX;
+	int32 FromY;
+	int32 ToX;
+	int32 ToY;
+
+	GetXYFromIndex(CellFrom, FromX, FromY);
+	GetXYFromIndex(CellTo, ToX, ToY);
+
+	return FMath::Abs(FromX - ToX) + FMath::Abs(FromY - ToY);
+}
+
 void AFGGridActor::GetXYFromIndex(int32 Index, int32& CellX, int32& CellY)
 {
 	CellX = Index % Width;

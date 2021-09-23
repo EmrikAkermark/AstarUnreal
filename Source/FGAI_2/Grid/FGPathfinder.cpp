@@ -39,7 +39,7 @@ void UFGPathfinder::StartPathfinding(int32 StartCell, int32 EndCell)
 		for (int32 CurrentNeighbour : CurrentNeighbours)
 		{
 			
-			int32 NeighborCurrentCost = Grid->TileList[CurrentCell].Weight + Grid->GetFValue(CurrentCell, EndCell) + Grid->GetFValue(CurrentNeighbour, EndCell);
+			int32 NeighborCurrentCost = Grid->TileList[CurrentCell].Weight + Grid->GetHValue(CurrentCell, Grid->TileList[CurrentCell].ParentId);
 			if(OpenList.Contains(CurrentNeighbour))
 			{
 				if(Grid->TileList[CurrentNeighbour].Weight <= NeighborCurrentCost)
@@ -48,7 +48,7 @@ void UFGPathfinder::StartPathfinding(int32 StartCell, int32 EndCell)
 				}
 				else if(ClosedList.Contains(CurrentNeighbour))
 				{
-					if(Grid->TileList[CurrentNeighbour].Weight <= NeighborCurrentCost)
+					if(Grid->GetFValue(CurrentNeighbour, EndCell) <= NeighborCurrentCost)
 					{
 						continue;
 					}

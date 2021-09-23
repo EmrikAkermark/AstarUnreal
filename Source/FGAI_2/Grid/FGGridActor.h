@@ -31,6 +31,7 @@ public:
 
 	TArray<int32> GetNeighboursAroundCell(int32 Cell);
 	int32 GetFValue(int32 CellFrom, int32 CellTo);
+	int32 GetHValue(int32 CellFrom, int32 CellTo);
 	void GetXYFromIndex(int32 Index, int32& CellX, int32& CellY);
 	FVector GetWorldLocationFromIndex(int32 Index);
 	void ResetBoard();
