@@ -77,6 +77,19 @@ int32 AFGGridActor::GetHValue(int32 CellFrom, int32 CellTo)
 	return FMath::Abs(FromX - ToX) + FMath::Abs(FromY - ToY);
 }
 
+float AFGGridActor::GetHValueEuclidian(int32 CellFrom, int32 CellTo)
+{
+	int32 FromX;
+	int32 FromY;
+	int32 ToX;
+	int32 ToY;
+
+	GetXYFromIndex(CellFrom, FromX, FromY);
+	GetXYFromIndex(CellTo, ToX, ToY);
+
+	return FMath::Sqrt(FMath::Abs(FromX - ToX)^2 + FMath::Abs(FromY - ToY)^2);
+}
+
 void AFGGridActor::GetXYFromIndex(int32 Index, int32& CellX, int32& CellY)
 {
 	CellX = Index % Width;
@@ -96,7 +109,7 @@ void AFGGridActor::ResetBoard()
 	for (auto& Tile : TileList)
 	{
 		//UE_LOG(LogTemp, Log, TEXT("Resetting board"))
-		Tile.Weight = 1;
+		Tile.Weight = Tile.DefaultWeight;
 		Tile.ParentId = NULL;
 		UE_LOG(LogTemp, Log, TEXT("Resetting board, Weight: %d"), Tile.Weight)
 	}

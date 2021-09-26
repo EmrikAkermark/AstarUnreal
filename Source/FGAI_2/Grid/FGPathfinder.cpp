@@ -15,6 +15,7 @@ UFGPathfinder::UFGPathfinder()
 	// ...
 }
 
+//This method is called by some additions to your sphere drawer blueprint. Check it out, it is ugly!
 void UFGPathfinder::StartPathfinding(int32 StartCell, int32 EndCell)
 {
 	Grid->ResetBoard();
@@ -38,7 +39,7 @@ void UFGPathfinder::StartPathfinding(int32 StartCell, int32 EndCell)
 		}
 		for (int32 CurrentNeighbour : CurrentNeighbours)
 		{
-			
+			//This used to be very wrong for a long while, being g(current) + F(current to end) + F(Neighbour to end)
 			int32 NeighborCurrentCost = Grid->TileList[CurrentCell].Weight + Grid->GetHValue(CurrentCell, Grid->TileList[CurrentCell].ParentId);
 			if(OpenList.Contains(CurrentNeighbour))
 			{
@@ -87,18 +88,32 @@ void UFGPathfinder::StartPathfinding(int32 StartCell, int32 EndCell)
 		UE_LOG(LogTemp, Log, TEXT("Couldn't find end"));
 		
 	}
+	//Terrible, dangerous way to add the path in its own list,
+	//Has caused several infinite loops during development.
 	while(CurrentCell != StartCell)
     {
+		//If I ever find that the cell after this one already exists in the path list,
+		//Then something has gone terribly wrong and we abort the process
     	if(Path.Contains(Grid->TileList[CurrentCell].ParentId))
     	{
-    		UE_LOG(LogTemp, Log, TEXT("Something's fucky"))
+    		UE_LOG(LogTemp, Log, TEXT("The path has somehow split, that's not good"))
     		break;
     	}
     	Path.Add(CurrentCell);
 		UE_LOG(LogTemp,Log, TEXT("%d, %d"), CurrentCell, Grid->TileList[CurrentCell].Weight );
     	CurrentCell = Grid->TileList[CurrentCell].ParentId;
     }
+	//this is a remnant when I only drew the path in between the start and end, and when I
+	//switched rendering method I couldn't/didn't bother to find a way to add the last cell
+	//while inside the while loop
 	Path.Add(CurrentCell);
+
+	//Old rendering method before switching to tick render, alongside aborted attempt
+	//To draw every element one step at a time with a timed delay in between
+	//
+	//Is there an easy way to iterate thru a list in UE4 with a pause between iteration?
+	//I could have done this easily with a Coroutine in Unity, is there a UE equivalent?
+	
 	//UE_LOG(LogTemp,Log, TEXT("%d, %d"), CurrentCell, Grid->TileList[CurrentCell].Weight );
 	//int32 X;
 	//int32 Y;
@@ -147,6 +162,13 @@ void UFGPathfinder::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	//Right now I render everything from every list, and counting on the fact that
+	//drawn debugs render over each other when called later.
+	//A cheaper way would be to render first the path from start to finish, then
+	//the evaulated tiles in the closed list except for the ones also in path.
+	//Open can be rendererd at any time
+	
+	
 	for (auto Index : OpenList)
 	{
 		DrawSphere(Index, FColor::Black);

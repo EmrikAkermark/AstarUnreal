@@ -29,12 +29,26 @@ public:
 
 	virtual void BeginPlay() override;
 
+	//These are my own methods here up top
+
+	//Only gets 4 neighbours
 	TArray<int32> GetNeighboursAroundCell(int32 Cell);
+
+	//These should be obvious
 	int32 GetFValue(int32 CellFrom, int32 CellTo);
 	int32 GetHValue(int32 CellFrom, int32 CellTo);
+
+	//Added my owner helper based on your methods,
+	//working with a grid in a regular list was a new one for me
 	void GetXYFromIndex(int32 Index, int32& CellX, int32& CellY);
+	//This was for drawing the things out
 	FVector GetWorldLocationFromIndex(int32 Index);
+	//This almost ruined everything, thanks for pointing out structs
+	//tend to give copies rather than refs
 	void ResetBoard();
+
+	//Unused, didn't produce desired result
+	float GetHValueEuclidian(int32 CellFrom, int32 CellTo);
 	
 	/*
 	* Called whenever placed in the editor or world, having its transform changed etc.

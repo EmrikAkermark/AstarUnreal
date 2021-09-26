@@ -30,6 +30,8 @@ protected:
 	TArray<int32> ClosedList;
 	TArray<int32> Path;
 
+	//Remnants of trying to draw the contents in the lists
+	//one step at the time with a timed pause in between
 	FTimerHandle DrawClosedListHandle;
 	FTimerHandle DrawPathHandle;
 public:	
